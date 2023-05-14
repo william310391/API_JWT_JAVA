@@ -85,5 +85,23 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
     }
 
+    public ResponseEntity<?> Login(UsuarioDTO usuarioDTO) {
+        try {
+            Usuario entVal = repo.findUsuarioByCuenta(usuarioDTO.getCuenta());
+            if (Objects.isNull(entVal)) {
+                throw new BusinessException(HttpStatus.BAD_REQUEST, "cuenta no valida");
+            }
+            if(!entVal.getContrasena().equals(usuarioDTO.getContrasena())) {
+                throw new BusinessException(HttpStatus.BAD_REQUEST, "cuenta o conytaseña no valida");
+            }          
+            usuarioDTO=UsuarioMapper.INSTANCE.usuarioToUsuarioDTO(entVal);
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<UsuarioDTO>(usuarioDTO));            
+        } catch (Exception e) {
+            throw new BusinessException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+
+
 
 }
