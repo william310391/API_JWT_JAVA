@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
 
 import com.example.demo.DTO.UsuarioDTO;
+import com.example.demo.Exception.ValidationGroup.Login;
 import com.example.demo.Service.UsuarioService;
 
 @RestController
@@ -47,5 +49,10 @@ public class UsuarioController {
     @DeleteMapping("/delete")
     public ResponseEntity<?> delete(@RequestParam Integer usuarioId){
         return service.delete(usuarioId);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Validated({Login.class})@RequestBody UsuarioDTO dto){
+        return service.Login(dto);
     }
 }
